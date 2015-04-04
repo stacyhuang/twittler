@@ -3,25 +3,96 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <style>
+      body{
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        background-size: 100%;
+        background-color: #B9DFEF;
+      }
+
+      .main{
+        position: relative;
+        width: 880px;
+        display: block;
+        margin: 0 auto;
+        background-color: white;
+        overflow: hidden;
+      }
+
+      .newTweetsContainer{
+        text-align: center;   
+        height: 36px; 
+        background-color: #F5F8FA;
+        color: #0084B4;
+        cursor: pointer;
+        border-bottom: 3px solid #B9DFEF;
+        display: none;
+      }
+
+      .tweetsItem{
+        height: 36px;
+        border-bottom: 3px solid #B9DFEF;
+      } 
+
+    </style>
   </head>
   <body>
+
     <script>
 
       $(document).ready(function(){
+
         var $body = $('body');
         $body.html('');
 
+        // set up the main container
+        var $main = $('<div class="main"></div>');
+        $main.appendTo($body);
+        
+        // set up the 'show new tweets' container
+        var totalCount = 0;
+        var $showNewTweet = $('<div class="newTweetsContainer"></div>');
+        $showNewTweet.appendTo($main);
+
+        // generate tweets on page load
         var index = streams.home.length - 1;
         while(index >= 0){
           var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
+          var $tweet = $('<div class="tweetsItem"></div>');
+          $tweet.text(index + '@' + tweet.user + ': ' + tweet.message + ' ' + tweet.created_at);
+          $tweet.appendTo($main);
           index -= 1;
+          totalCount++;
         }
+
+        
+        
+        // check for and display new tweets
+        setInterval(function(){
+          var currentCount = streams.home.length - totalCount;
+          if(currentCount > 0){
+            $showNewTweet.text('View ' + currentCount + ' new Tweets');
+            $showNewTweet.slideDown();
+          }
+
+          $('.newTweetsContainer').on('click', function(){
+            var index = totalCount;
+            for(var i=0; i<currentCount; i++){
+              console.log(index);
+              var tweet = streams.home[index];
+              var $tweet = $('<div class="tweetsItem"></div>');
+              $tweet.text(index + '@' + tweet.user + ': ' + tweet.message + ' ' + tweet.created_at);
+              $showNewTweet.after($tweet);
+              index += 1;
+              totalCount++; 
+            } 
+            $showNewTweet.slideUp(); 
+          });
+        }, 5000);
 
       });
 
     </script>
+      
   </body>
 </html>
