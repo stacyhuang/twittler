@@ -2,6 +2,7 @@
 <html>
   <head>
     <script src="jquery.js"></script>
+    <script src="moment.js"></script>
     <script src="data_generator.js"></script>
     <style>
       body{
@@ -12,7 +13,7 @@
 
       .main{
         position: relative;
-        width: 880px;
+        width: 800px;
         display: block;
         margin: 0 auto;
         background-color: white;
@@ -21,18 +22,38 @@
 
       .newTweetsContainer{
         text-align: center;   
-        height: 36px; 
+        height: 20px; 
         background-color: #F5F8FA;
         color: #0084B4;
         cursor: pointer;
         border-bottom: 3px solid #B9DFEF;
         display: none;
+        padding: 10px;
       }
 
-      .tweetsItem{
-        height: 36px;
+      .tweetContainer{
+        height: 52px;
         border-bottom: 3px solid #B9DFEF;
+        padding: 6px;
+        line-height: 25px;
+      }
+
+      .tweetUser{
+        font-weight: bold;
+        line-height: 20px;
+        display: inline-block;
       } 
+
+      .tweetUser:hover{
+        color: #0084B4;
+      }
+
+      .tweetTimestamp{
+        display: inline-block;
+        margin-left: 5px;
+        color: #8899a6;
+        font-size: 13px;
+      }
 
     </style>
   </head>
@@ -41,6 +62,8 @@
     <script>
 
       $(document).ready(function(){
+
+        moment().format();
 
         var $body = $('body');
         $body.html('');
@@ -56,17 +79,26 @@
 
         // generate tweets on page load
         var index = streams.home.length - 1;
-        while(index >= 0){
+        while(index >= 0){     
+          var $tweetContainer = $('<div class="tweetContainer"></div>');
+          var $tweetHeader = $('<div class="tweetHeader"></div>');
+          var $tweetContent = $('<div class="tweetContent"></div>');
+          var $tweetUser = $('<div class="tweetUser"></div>');
+          var $tweetTimestamp = $('<div class="tweetTimestamp"></div>');
+          $tweetHeader.appendTo($tweetContainer);          
+          $tweetContent.appendTo($tweetContainer);
+          $tweetUser.appendTo($tweetHeader);
+          $tweetTimestamp.appendTo($tweetHeader);
+
           var tweet = streams.home[index];
-          var $tweet = $('<div class="tweetsItem"></div>');
-          $tweet.text(index + '@' + tweet.user + ': ' + tweet.message + ' ' + tweet.created_at);
-          $tweet.appendTo($main);
+          $tweetUser.text(tweet.user);
+          $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
+          $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
+          $tweetContainer.appendTo($main);
           index -= 1;
           totalCount++;
         }
 
-        
-        
         // check for and display new tweets
         setInterval(function(){
           var currentCount = streams.home.length - totalCount;
@@ -78,17 +110,52 @@
           $('.newTweetsContainer').on('click', function(){
             var index = totalCount;
             for(var i=0; i<currentCount; i++){
-              console.log(index);
+              var $tweetContainer = $('<div class="tweetContainer"></div>');
+              var $tweetHeader = $('<div class="tweetHeader"></div>');
+              var $tweetContent = $('<div class="tweetContent"></div>');
+              var $tweetUser = $('<div class="tweetUser"></div>');
+              var $tweetTimestamp = $('<div class="tweetTimestamp"></div>');
+              $tweetHeader.appendTo($tweetContainer);          
+              $tweetContent.appendTo($tweetContainer);
+              $tweetUser.appendTo($tweetHeader);
+              $tweetTimestamp.appendTo($tweetHeader);
+
               var tweet = streams.home[index];
-              var $tweet = $('<div class="tweetsItem"></div>');
-              $tweet.text(index + '@' + tweet.user + ': ' + tweet.message + ' ' + tweet.created_at);
-              $showNewTweet.after($tweet);
+              $tweetUser.text(tweet.user);
+              $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
+              $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
+              $showNewTweet.after($tweetContainer);
               index += 1;
               totalCount++; 
             } 
             $showNewTweet.slideUp(); 
           });
         }, 5000);
+
+        $('.tweetUser').on('click', function(){
+          $('.tweetContainer').remove();
+          var selectedUser = $(this).text();
+          var userIndex = streams.users[selectedUser].length - 1;
+          while(userIndex >= 0){
+            var $tweetContainer = $('<div class="tweetContainer"></div>');
+            var $tweetHeader = $('<div class="tweetHeader"></div>');
+            var $tweetContent = $('<div class="tweetContent"></div>');
+            var $tweetUser = $('<div class="tweetUser"></div>');
+            var $tweetTimestamp = $('<div class="tweetTimestamp"></div>');
+            $tweetHeader.appendTo($tweetContainer);          
+            $tweetContent.appendTo($tweetContainer);
+            $tweetUser.appendTo($tweetHeader);
+            $tweetTimestamp.appendTo($tweetHeader);
+
+            var tweet = streams.users[selectedUser][userIndex];
+            $tweetUser.text(tweet.user);
+            $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
+            $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
+            $tweetContainer.appendTo($main);
+            userIndex -= 1;
+            totalCount++;
+          }
+        });
 
       });
 
