@@ -77,19 +77,29 @@
         var $showNewTweet = $('<div class="newTweetsContainer"></div>');
         $showNewTweet.appendTo($main);
 
-        // generate tweets on page load
-        var index = streams.home.length - 1;
-        while(index >= 0){     
-          var $tweetContainer = $('<div class="tweetContainer"></div>');
-          var $tweetHeader = $('<div class="tweetHeader"></div>');
-          var $tweetContent = $('<div class="tweetContent"></div>');
-          var $tweetUser = $('<div class="tweetUser"></div>');
-          var $tweetTimestamp = $('<div class="tweetTimestamp"></div>');
+        // create container for tweets
+        var $tweetContainer;
+        var $tweetHeader;
+        var $tweetContent;
+        var $tweetUser;
+        var $tweetTimestamp;
+
+        var createTweetContainer = function(){
+          $tweetContainer = $('<div class="tweetContainer"></div>');
+          $tweetHeader = $('<div class="tweetHeader"></div>');
+          $tweetContent = $('<div class="tweetContent"></div>');
+          $tweetUser = $('<div class="tweetUser"></div>');
+          $tweetTimestamp = $('<div class="tweetTimestamp"></div>');
           $tweetHeader.appendTo($tweetContainer);          
           $tweetContent.appendTo($tweetContainer);
           $tweetUser.appendTo($tweetHeader);
           $tweetTimestamp.appendTo($tweetHeader);
+        };
 
+        // generate tweets on page load
+        var index = streams.home.length - 1;
+        while(index >= 0){     
+          createTweetContainer();
           var tweet = streams.home[index];
           $tweetUser.text(tweet.user);
           $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
@@ -110,16 +120,7 @@
           $('.newTweetsContainer').on('click', function(){
             var index = totalCount;
             for(var i=0; i<currentCount; i++){
-              var $tweetContainer = $('<div class="tweetContainer"></div>');
-              var $tweetHeader = $('<div class="tweetHeader"></div>');
-              var $tweetContent = $('<div class="tweetContent"></div>');
-              var $tweetUser = $('<div class="tweetUser"></div>');
-              var $tweetTimestamp = $('<div class="tweetTimestamp"></div>');
-              $tweetHeader.appendTo($tweetContainer);          
-              $tweetContent.appendTo($tweetContainer);
-              $tweetUser.appendTo($tweetHeader);
-              $tweetTimestamp.appendTo($tweetHeader);
-
+              createTweetContainer();
               var tweet = streams.home[index];
               $tweetUser.text(tweet.user);
               $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
@@ -132,21 +133,13 @@
           });
         }, 5000);
 
+        // allow user to click on a username to see that user's timeline.
         $('.tweetUser').on('click', function(){
           $('.tweetContainer').remove();
           var selectedUser = $(this).text();
           var userIndex = streams.users[selectedUser].length - 1;
           while(userIndex >= 0){
-            var $tweetContainer = $('<div class="tweetContainer"></div>');
-            var $tweetHeader = $('<div class="tweetHeader"></div>');
-            var $tweetContent = $('<div class="tweetContent"></div>');
-            var $tweetUser = $('<div class="tweetUser"></div>');
-            var $tweetTimestamp = $('<div class="tweetTimestamp"></div>');
-            $tweetHeader.appendTo($tweetContainer);          
-            $tweetContent.appendTo($tweetContainer);
-            $tweetUser.appendTo($tweetHeader);
-            $tweetTimestamp.appendTo($tweetHeader);
-
+            createTweetContainer();
             var tweet = streams.users[selectedUser][userIndex];
             $tweetUser.text(tweet.user);
             $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
