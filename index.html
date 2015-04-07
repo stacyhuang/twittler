@@ -77,7 +77,7 @@
         var $showNewTweet = $('<div class="newTweetsContainer"></div>');
         $showNewTweet.appendTo($main);
 
-        // create container for tweets
+        // utility function for creating a new tweet container
         var $tweetContainer;
         var $tweetHeader;
         var $tweetContent;
@@ -98,7 +98,7 @@
 
         // generate tweets on page load
         var index = streams.home.length - 1;
-        while(index >= 0){     
+        while(index >= 0){    
           createTweetContainer();
           var tweet = streams.home[index];
           $tweetUser.text(tweet.user);
@@ -134,7 +134,7 @@
         }, 5000);
 
         // allow user to click on a username to see that user's timeline.
-        $('.tweetUser').on('click', function(){
+        $('.main').on('click', '.tweetUser', function(){
           $('.tweetContainer').remove();
           var selectedUser = $(this).text();
           var userIndex = streams.users[selectedUser].length - 1;
