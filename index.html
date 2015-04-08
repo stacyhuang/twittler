@@ -9,6 +9,28 @@
         font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
         background-size: 100%;
         background-color: #B9DFEF;
+        margin: 0;
+      }
+
+      .header{
+        height: 48px;
+        margin-bottom: 15px;
+        background-color: white;
+        border-bottom: 1.5px solid #0084B4;
+        text-align: center;
+      }
+
+      #logo{
+        font-size: 37px;
+        font-weight: bold;
+        display: inline-block;
+        color: #0084B4
+      }
+
+      .content{
+        background: url("http://pixabay.com/static/uploads/photo/2013/07/13/10/07/rubber-156597_640.png") bottom left no-repeat;
+        background-attachment: fixed;
+        background-position: left 15px bottom 30px;
       }
 
       .main{
@@ -42,6 +64,7 @@
         font-weight: bold;
         line-height: 20px;
         display: inline-block;
+        cursor: pointer;
       } 
 
       .tweetUser:hover{
@@ -68,9 +91,16 @@
         var $body = $('body');
         $body.html('');
 
+        var $header = $('<div class="header"></div>');
+        $header.appendTo($body);
+        var $logo = $('<div id="logo">Twittler</h1>');
+        $logo.appendTo($header);
+        var $content = $('<div class="content"></div>');
+        $content.appendTo($body);
+
         // set up the main container
         var $main = $('<div class="main"></div>');
-        $main.appendTo($body);
+        $main.appendTo($content);
         
         // set up the 'show new tweets' container
         var totalCount = 0;
