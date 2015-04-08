@@ -24,13 +24,15 @@
         font-size: 37px;
         font-weight: bold;
         display: inline-block;
-        color: #0084B4
+        color: #0084B4;
+        cursor: pointer;
       }
 
       .content{
         background: url("http://pixabay.com/static/uploads/photo/2013/07/13/10/07/rubber-156597_640.png") bottom left no-repeat;
         background-attachment: fixed;
         background-position: left 15px bottom 30px;
+        min-height: 1100px;
       }
 
       .main{
@@ -58,6 +60,10 @@
         border-bottom: 3px solid #B9DFEF;
         padding: 6px;
         line-height: 25px;
+      }
+
+      .tweetContainer:last-child{
+        border-bottom: 0;
       }
 
       .tweetUser{
@@ -97,8 +103,6 @@
         $logo.appendTo($header);
         var $content = $('<div class="content"></div>');
         $content.appendTo($body);
-
-        // set up the main container
         var $main = $('<div class="main"></div>');
         $main.appendTo($content);
         
@@ -175,6 +179,7 @@
         // allow user to click on a username to see that user's timeline.
         $('.main').on('click', '.tweetUser', function(){
           stopInterval();
+          $showNewTweet.slideUp(); 
           $('.tweetContainer').remove();
           totalCount = 0;
           var selectedUser = $(this).text();
@@ -191,6 +196,25 @@
             totalCount++;
           }
           checkTweets($selectedArr);
+        });
+
+        $('.header').on('click', '#logo', function(){
+          stopInterval();
+          $('.tweetContainer').remove();
+          totalCount = 0;
+
+          var index = streams.home.length - 1;
+          while(index >= 0){    
+            createTweetContainer();
+            var tweet = streams.home[index];
+            $tweetUser.text(tweet.user);
+            $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
+            $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
+            $tweetContainer.appendTo($main);
+            index -= 1;
+            totalCount++;
+          }
+          checkTweets(streams.home);
         });
 
       });
