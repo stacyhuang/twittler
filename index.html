@@ -74,6 +74,7 @@
         
         // set up the 'show new tweets' container
         var totalCount = 0;
+        var interval;
         var $showNewTweet = $('<div class="newTweetsContainer"></div>');
         $showNewTweet.appendTo($main);
 
@@ -83,7 +84,6 @@
         var $tweetContent;
         var $tweetUser;
         var $tweetTimestamp;
-
         var createTweetContainer = function(){
           $tweetContainer = $('<div class="tweetContainer"></div>');
           $tweetHeader = $('<div class="tweetHeader"></div>');
@@ -95,6 +95,38 @@
           $tweetUser.appendTo($tweetHeader);
           $tweetTimestamp.appendTo($tweetHeader);
         };
+
+        // check for new tweets
+        var checkTweets = function(arr){
+          interval = setInterval(function(){
+            var currentCount = arr.length - totalCount;
+            if(currentCount > 0){
+                $showNewTweet.text('View ' + currentCount + ' new Tweets');
+                $showNewTweet.slideDown();
+              }
+
+              $('.main').on('click', '.newTweetsContainer', function(){
+                var index = totalCount;
+                for(var i=0; i<currentCount; i++){
+                  createTweetContainer();
+                  var tweet = arr[index];
+                  console.log(tweet);
+                  $tweetUser.text(tweet.user);
+                  $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
+                  $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
+                  $showNewTweet.after($tweetContainer);
+                  index += 1;
+                  totalCount++; 
+                } 
+                $showNewTweet.slideUp(); 
+            }); 
+          }, 5000);
+        };
+
+        // utility function for clearing interval
+        function stopInterval() {
+          clearInterval(interval);
+        }
 
         // generate tweets on page load
         var index = streams.home.length - 1;
@@ -108,35 +140,15 @@
           index -= 1;
           totalCount++;
         }
-
-        // check for and display new tweets
-        setInterval(function(){
-          var currentCount = streams.home.length - totalCount;
-          if(currentCount > 0){
-            $showNewTweet.text('View ' + currentCount + ' new Tweets');
-            $showNewTweet.slideDown();
-          }
-
-          $('.newTweetsContainer').on('click', function(){
-            var index = totalCount;
-            for(var i=0; i<currentCount; i++){
-              createTweetContainer();
-              var tweet = streams.home[index];
-              $tweetUser.text(tweet.user);
-              $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
-              $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-              $showNewTweet.after($tweetContainer);
-              index += 1;
-              totalCount++; 
-            } 
-            $showNewTweet.slideUp(); 
-          });
-        }, 5000);
+        checkTweets(streams.home);
 
         // allow user to click on a username to see that user's timeline.
         $('.main').on('click', '.tweetUser', function(){
+          stopInterval();
           $('.tweetContainer').remove();
+          totalCount = 0;
           var selectedUser = $(this).text();
+          var $selectedArr = streams.users[selectedUser];
           var userIndex = streams.users[selectedUser].length - 1;
           while(userIndex >= 0){
             createTweetContainer();
@@ -148,6 +160,7 @@
             userIndex -= 1;
             totalCount++;
           }
+          checkTweets($selectedArr);
         });
 
       });
