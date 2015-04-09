@@ -4,90 +4,9 @@
     <script src="jquery.js"></script>
     <script src="moment.js"></script>
     <script src="data_generator.js"></script>
-    <style>
-      body{
-        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-        background-size: 100%;
-        background-color: #B9DFEF;
-        margin: 0;
-      }
-
-      .header{
-        height: 48px;
-        margin-bottom: 15px;
-        background-color: white;
-        border-bottom: 1.5px solid #0084B4;
-        text-align: center;
-      }
-
-      #logo{
-        font-size: 37px;
-        font-weight: bold;
-        display: inline-block;
-        color: #0084B4;
-        cursor: pointer;
-      }
-
-      .content{
-        background: url("http://pixabay.com/static/uploads/photo/2013/07/13/10/07/rubber-156597_640.png") bottom left no-repeat;
-        background-attachment: fixed;
-        background-position: left 15px bottom 30px;
-        min-height: 1100px;
-      }
-
-      .main{
-        position: relative;
-        width: 800px;
-        display: block;
-        margin: 0 auto;
-        background-color: white;
-        overflow: hidden;
-      }
-
-      .newTweetsContainer{
-        text-align: center;   
-        height: 20px; 
-        background-color: #F5F8FA;
-        color: #0084B4;
-        cursor: pointer;
-        border-bottom: 3px solid #B9DFEF;
-        display: none;
-        padding: 10px;
-      }
-
-      .tweetContainer{
-        height: 52px;
-        border-bottom: 3px solid #B9DFEF;
-        padding: 6px;
-        line-height: 25px;
-      }
-
-      .tweetContainer:last-child{
-        border-bottom: 0;
-      }
-
-      .tweetUser{
-        font-weight: bold;
-        line-height: 20px;
-        display: inline-block;
-        cursor: pointer;
-      } 
-
-      .tweetUser:hover{
-        color: #0084B4;
-      }
-
-      .tweetTimestamp{
-        display: inline-block;
-        margin-left: 5px;
-        color: #8899a6;
-        font-size: 13px;
-      }
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-
     <script>
 
       $(document).ready(function(){
@@ -96,21 +15,20 @@
 
         var $body = $('body');
         $body.html('');
-
         var $header = $('<div class="header"></div>');
         $header.appendTo($body);
         var $logo = $('<div id="logo">Twittler</h1>');
         $logo.appendTo($header);
         var $content = $('<div class="content"></div>');
         $content.appendTo($body);
-        var $main = $('<div class="main"></div>');
-        $main.appendTo($content);
-        
-        // set up the 'show new tweets' container
+        var $container = $('<div class="container"></div>');
+        $container.appendTo($content);
+        var $newTweetsContainer = $('<div class="newTweetsContainer"></div>');
+        $newTweetsContainer.appendTo($container);
+
         var totalCount = 0;
         var interval;
-        var $showNewTweet = $('<div class="newTweetsContainer"></div>');
-        $showNewTweet.appendTo($main);
+        var $selectedUser;
 
         // utility function for creating a new tweet container
         var $tweetContainer;
@@ -130,32 +48,41 @@
           $tweetTimestamp.appendTo($tweetHeader);
         };
 
-        // check for new tweets
+        // set interval for checking new tweets
         var checkTweets = function(arr){
           interval = setInterval(function(){
-            var currentCount = arr.length - totalCount;
-            if(currentCount > 0){
-                $showNewTweet.text('View ' + currentCount + ' new Tweets');
-                $showNewTweet.slideDown();
-              }
-
-              $('.main').on('click', '.newTweetsContainer', function(){
-                var index = totalCount;
-                for(var i=0; i<currentCount; i++){
-                  createTweetContainer();
-                  var tweet = arr[index];
-                  console.log(tweet);
-                  $tweetUser.text(tweet.user);
-                  $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
-                  $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-                  $showNewTweet.after($tweetContainer);
-                  index += 1;
-                  totalCount++; 
-                } 
-                $showNewTweet.slideUp(); 
-            }); 
+            var arrLength = arr.length;
+            var newTweet = arrLength - totalCount;
+            if(newTweet > 0){
+                $newTweetsContainer.text('View ' + newTweet + ' new Tweets');
+                $newTweetsContainer.slideDown();
+            }
           }, 5000);
         };
+
+        // show new tweets on click
+        $('.container').on('click', '.newTweetsContainer', function(){
+          if(selectedUser === "home"){
+            var arrLength = streams.home.length;
+          }else{
+            var arrLength = streams.users[selectedUser].length;
+          }
+          var newTweet = arrLength - totalCount;
+          for(var i=0; i<newTweet; i++){
+            if(selectedUser === "home"){
+              var tweet = streams.home[totalCount];
+            }else{
+              var tweet = streams.users[selectedUser][totalCount];
+            }
+            createTweetContainer();
+            $tweetUser.text(tweet.user);
+            $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
+            $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
+            $newTweetsContainer.after($tweetContainer);
+            totalCount++; 
+          } 
+          $newTweetsContainer.slideUp();
+        }); 
 
         // utility function for clearing interval
         function stopInterval() {
@@ -163,26 +90,31 @@
         }
 
         // generate tweets on page load
-        var index = streams.home.length - 1;
-        while(index >= 0){    
-          createTweetContainer();
-          var tweet = streams.home[index];
-          $tweetUser.text(tweet.user);
-          $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
-          $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-          $tweetContainer.appendTo($main);
-          index -= 1;
-          totalCount++;
-        }
-        checkTweets(streams.home);
+        var loadTweets = function(){
+          selectedUser = "home";
+          var index = streams.home.length - 1;
+          while(index >= 0){    
+            createTweetContainer();
+            var tweet = streams.home[index];
+            $tweetUser.text(tweet.user);
+            $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
+            $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
+            $tweetContainer.appendTo($container);
+            index -= 1;
+            totalCount++;
+          }
+          checkTweets(streams.home);
+        };
+
+        loadTweets();
 
         // allow user to click on a username to see that user's timeline.
-        $('.main').on('click', '.tweetUser', function(){
+        $('.container').on('click', '.tweetUser', function(){
           stopInterval();
-          $showNewTweet.slideUp(); 
+          $newTweetsContainer.slideUp(); 
           $('.tweetContainer').remove();
           totalCount = 0;
-          var selectedUser = $(this).text();
+          selectedUser = $(this).text();
           var $selectedArr = streams.users[selectedUser];
           var userIndex = streams.users[selectedUser].length - 1;
           while(userIndex >= 0){
@@ -191,35 +123,23 @@
             $tweetUser.text(tweet.user);
             $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
             $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-            $tweetContainer.appendTo($main);
+            $tweetContainer.appendTo($container);
             userIndex -= 1;
             totalCount++;
           }
           checkTweets($selectedArr);
         });
 
+        // allow user to click on the logo to see tweets from all users
         $('.header').on('click', '#logo', function(){
           stopInterval();
           $('.tweetContainer').remove();
           totalCount = 0;
-
-          var index = streams.home.length - 1;
-          while(index >= 0){    
-            createTweetContainer();
-            var tweet = streams.home[index];
-            $tweetUser.text(tweet.user);
-            $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
-            $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-            $tweetContainer.appendTo($main);
-            index -= 1;
-            totalCount++;
-          }
-          checkTweets(streams.home);
+          loadTweets();
         });
 
       });
 
     </script>
-      
   </body>
 </html>

@@ -1,0 +1,77 @@
+body{
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  background-size: 100%;
+  background-color: #B9DFEF;
+  margin: 0;
+}
+
+.header{
+  height: 48px;
+  margin-bottom: 15px;
+  background-color: white;
+  text-align: center;
+}
+
+#logo{
+  font-size: 37px;
+  font-weight: bold;
+  display: inline-block;
+  color: #0084B4;
+  cursor: pointer;
+}
+
+.content{
+  background: url("http://pixabay.com/static/uploads/photo/2013/07/13/10/07/rubber-156597_640.png") bottom left no-repeat;
+  background-attachment: fixed;
+  background-position: left 15px bottom 30px;
+  min-height: 1100px;
+}
+
+.container{
+  position: relative;
+  width: 800px;
+  display: block;
+  margin: 0 auto;
+  background-color: white;
+  overflow: hidden;
+}
+
+.newTweetsContainer{
+  text-align: center;   
+  height: 20px; 
+  background-color: #F5F8FA;
+  color: #0084B4;
+  cursor: pointer;
+  border-bottom: 3px solid #B9DFEF;
+  display: none;
+  padding: 10px;
+}
+
+.tweetContainer{
+  height: 52px;
+  border-bottom: 3px solid #B9DFEF;
+  padding: 6px;
+  line-height: 25px;
+}
+
+.tweetContainer:last-child{
+  border-bottom: 0;
+}
+
+.tweetUser{
+  font-weight: bold;
+  line-height: 20px;
+  display: inline-block;
+  cursor: pointer;
+} 
+
+.tweetUser:hover{
+  color: #0084B4;
+}
+
+.tweetTimestamp{
+  display: inline-block;
+  margin-left: 5px;
+  color: #8899a6;
+  font-size: 13px;
+}
