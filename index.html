@@ -7,24 +7,20 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
+    <div class="header">
+      <div id="logo">Twittler</div>
+    </div>
+    <div class="content">
+      <div class="container">
+        <div class="newTweetsContainer"></div>
+      </div>
+    </div>
+
     <script>
 
       $(document).ready(function(){
 
         moment().format();
-
-        var $body = $('body');
-        $body.html('');
-        var $header = $('<div class="header"></div>');
-        $header.appendTo($body);
-        var $logo = $('<div id="logo">Twittler</h1>');
-        $logo.appendTo($header);
-        var $content = $('<div class="content"></div>');
-        $content.appendTo($body);
-        var $container = $('<div class="container"></div>');
-        $container.appendTo($content);
-        var $newTweetsContainer = $('<div class="newTweetsContainer"></div>');
-        $newTweetsContainer.appendTo($container);
 
         var totalCount = 0;
         var interval;
@@ -54,8 +50,8 @@
             var arrLength = arr.length;
             var newTweet = arrLength - totalCount;
             if(newTweet > 0){
-                $newTweetsContainer.text('View ' + newTweet + ' new Tweets');
-                $newTweetsContainer.slideDown();
+                $('.newTweetsContainer').text('View ' + newTweet + ' new Tweets');
+                $('.newTweetsContainer').slideDown();
             }
           }, 5000);
         };
@@ -78,10 +74,10 @@
             $tweetUser.text(tweet.user);
             $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
             $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-            $newTweetsContainer.after($tweetContainer);
+            $('.newTweetsContainer').after($tweetContainer);
             totalCount++; 
           } 
-          $newTweetsContainer.slideUp();
+          $('.newTweetsContainer').slideUp();
         }); 
 
         // utility function for clearing interval
@@ -99,7 +95,7 @@
             $tweetUser.text(tweet.user);
             $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
             $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-            $tweetContainer.appendTo($container);
+            $tweetContainer.appendTo($('.container'));
             index -= 1;
             totalCount++;
           }
@@ -111,7 +107,7 @@
         // allow user to click on a username to see that user's timeline.
         $('.container').on('click', '.tweetUser', function(){
           stopInterval();
-          $newTweetsContainer.slideUp(); 
+          $('.newTweetsContainer').slideUp(); 
           $('.tweetContainer').remove();
           totalCount = 0;
           selectedUser = $(this).text();
@@ -123,7 +119,7 @@
             $tweetUser.text(tweet.user);
             $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
             $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-            $tweetContainer.appendTo($container);
+            $tweetContainer.appendTo($('.container'));
             userIndex -= 1;
             totalCount++;
           }
@@ -131,7 +127,7 @@
         });
 
         // allow user to click on the logo to see tweets from all users
-        $('.header').on('click', '#logo', function(){
+        $('.navbar').on('click', '#logo', function(){
           stopInterval();
           $('.tweetContainer').remove();
           totalCount = 0;
