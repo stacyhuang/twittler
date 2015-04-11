@@ -17,14 +17,16 @@
       <div class="sidebar">
         <div class="header">Write a tweet</div>
         <div class="writeTweet">
-          <p>
-            Your Name<br>
-            <input type='text' id='username' />
-          </p>
-          <p>
-            What's happening?
-            <textarea type='text' id='userTweet'></textarea>
-          </p>
+          <form>
+            <p>
+              <textarea type='text' id='userTweet' placeholder="What's on your mind?"></textarea>
+            </p>
+            <span class="username">
+              @
+              <input type='text' id='username' />
+            </span>
+            <button type="submit" id="submitButton">Post</button>
+          </form>
         </div>
       </div>
     </div>
@@ -145,6 +147,16 @@
           $('.tweetContainer').remove();
           totalCount = 0;
           loadTweets();
+        });
+
+        $('#submitButton').on('click', function(){
+          var $username = $('#username').val();
+          var $userTweet = $('#userTweet').val();
+          streams.users[$username] = [];
+          visitor = $username;
+          writeTweet($userTweet);
+          $('#username').val('');
+          $('#userTweet').val('');
         });
 
       });

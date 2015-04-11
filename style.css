@@ -27,16 +27,6 @@ body{
   opacity: 0.95;
 }
 
-/*
-.container{
-  padding-top: 15px;
-  background: url("http://pixabay.com/static/uploads/photo/2013/07/13/10/07/rubber-156597_640.png") bottom left no-repeat;
-  background-attachment: fixed;
-  background-position: left 15px bottom 30px;
-  min-height: 1100px;
-}
-*/
-
 .header{
   text-align: center;
   font-weight: bold;   
@@ -48,18 +38,16 @@ body{
 }
 
 input{
-  width: 266px;
+  width: 205px;
   padding: 0;
-  margin: 2px 0 0 0;
   font-size: 16px;
   border: 1px solid #BFC1C2;
 }
 
 textarea{
-  height: 50px;
+  height: 80px;
   width: 266px;
   padding: 0;
-  margin: 2px 0 0 0;
   font-size: 16px;
   resize: none;
   border-color: #BFC1C2;
@@ -119,10 +107,14 @@ textarea{
 
 .writeTweet{
   padding: 10px;
-  height: 360
+  height: 360;
+  color: #8899a6; 
 }
 
 .writeTweet p{
-  padding: 0;
-  margin: 0;
+  margin: 0 0 5px 0;
+}
+
+.writeTweet p.username{
+  margin-top: 4px;
 }
