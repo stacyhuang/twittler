@@ -7,12 +7,25 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-    <div class="header">
+    <div class="navbar">
       <div id="logo">Twittler</div>
     </div>
-    <div class="content">
-      <div class="container">
-        <div class="newTweetsContainer"></div>
+    <div class="container">
+      <div class="main">
+        <div class="newTweets header"></div>
+      </div>
+      <div class="sidebar">
+        <div class="header">Write a tweet</div>
+        <div class="writeTweet">
+          <p>
+            Your Name<br>
+            <input type='text' id='username' />
+          </p>
+          <p>
+            What's happening?
+            <textarea type='text' id='userTweet'></textarea>
+          </p>
+        </div>
       </div>
     </div>
 
@@ -50,14 +63,14 @@
             var arrLength = arr.length;
             var newTweet = arrLength - totalCount;
             if(newTweet > 0){
-                $('.newTweetsContainer').text('View ' + newTweet + ' new Tweets');
-                $('.newTweetsContainer').slideDown();
+                $('.newTweets').text('View ' + newTweet + ' new Tweets');
+                $('.newTweets').slideDown();
             }
           }, 5000);
         };
 
         // show new tweets on click
-        $('.container').on('click', '.newTweetsContainer', function(){
+        $('.main').on('click', '.newTweets', function(){
           if(selectedUser === "home"){
             var arrLength = streams.home.length;
           }else{
@@ -74,10 +87,10 @@
             $tweetUser.text(tweet.user);
             $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
             $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-            $('.newTweetsContainer').after($tweetContainer);
+            $('.newTweets').after($tweetContainer);
             totalCount++; 
           } 
-          $('.newTweetsContainer').slideUp();
+          $('.newTweets').slideUp();
         }); 
 
         // utility function for clearing interval
@@ -95,7 +108,7 @@
             $tweetUser.text(tweet.user);
             $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
             $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-            $tweetContainer.appendTo($('.container'));
+            $tweetContainer.appendTo($('.main'));
             index -= 1;
             totalCount++;
           }
@@ -105,9 +118,9 @@
         loadTweets();
 
         // allow user to click on a username to see that user's timeline.
-        $('.container').on('click', '.tweetUser', function(){
+        $('.main').on('click', '.tweetUser', function(){
           stopInterval();
-          $('.newTweetsContainer').slideUp(); 
+          $('.newTweets').slideUp(); 
           $('.tweetContainer').remove();
           totalCount = 0;
           selectedUser = $(this).text();
@@ -119,7 +132,7 @@
             $tweetUser.text(tweet.user);
             $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
             $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
-            $tweetContainer.appendTo($('.container'));
+            $tweetContainer.appendTo($('.main'));
             userIndex -= 1;
             totalCount++;
           }
