@@ -1,56 +1,47 @@
 body{
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  /*font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;*/
+  font-family: 'Fredericka the Great', cursive;
   background-size: 100%;
   background-color: #B9DFEF;
   margin: 0;
-}
-
-.navbar{
-  height: 48px;
-  background-color: white;
-  text-align: center;
-  opacity: 0.95;
-}
-
-#logo{
-  font-size: 37px;
-  font-weight: bold;
-  color: #0084B4;
-  cursor: pointer;
+  background-image: url('http://www.div1grade7.com/studentp/cliffdamonjon/snow%20background%202.bmp');
+  background-attachment: fixed;
+  background-repeat: no-repeat; 
+  background-size: 100% 100%;
 }
 
 .container{
   width: 910px;
   margin: 0 auto;
-  margin-top: 15px;
+  margin-top: 35px;
   overflow: hidden;
-  opacity: 0.95;
+  opacity: 0.85;
+  padding-bottom: 25px;
 }
 
 .header{
   text-align: center;
   font-weight: bold;   
   height: 20px; 
-  background-color: #F5F8FA;
+  background-color: #F2F7FD;
   color: #0084B4;
   padding: 10px;
   border-bottom: 2px solid #B9DFEF;
 }
 
 input{
-  width: 205px;
+  width: 202px;
   padding: 0;
   font-size: 16px;
   border: 1px solid #BFC1C2;
 }
 
-textarea{
-  height: 80px;
-  width: 266px;
-  padding: 0;
-  font-size: 16px;
-  resize: none;
-  border-color: #BFC1C2;
+#logo{
+  font-size: 40px;
+  font-weight: bold;
+  color: #0084B4;
+  cursor: pointer;
+  padding-top: 5px;
 }
 
 .main{
@@ -63,6 +54,19 @@ textarea{
   border-radius: 8px;
 }
 
+.navbar{
+  height: 53px;
+  background-color: white;
+  text-align: center;
+  opacity: 0.95;
+  box-shadow: 0px 8px 25px 6px rgba(255,255,255,1);
+}
+
+.newTweets{
+  cursor: pointer;
+  display: none;
+}
+
 .sidebar{
   width: 290px;
   float: right;
@@ -71,9 +75,19 @@ textarea{
   overflow: hidden;
 }
 
-.newTweets{
-  cursor: pointer;
-  display: none;
+#submitButton{
+  font-family: 'Fredericka the Great', cursive;
+}
+
+textarea{
+  height: 80px;
+  width: 256px;
+  padding: 5px;
+  font-size: 16px;
+  resize: none;
+  border-color: #BFC1C2;
+  font-family: 'Fredericka the Great', cursive;
+  font-size: 14px;
 }
 
 .tweetContainer{
@@ -87,11 +101,16 @@ textarea{
   border-bottom: 0;
 }
 
+.tweetContent{
+  font-size: 15px;
+}
+
 .tweetUser{
   font-weight: bold;
   line-height: 20px;
   display: inline-block;
   cursor: pointer;
+  font-size: 18px
 } 
 
 .tweetUser:hover{
@@ -105,14 +124,14 @@ textarea{
   font-size: 13px;
 }
 
-.writeTweet{
-  padding: 10px;
-  height: 360;
-  color: #8899a6; 
+#userTweet{
+  margin: 0 0 5px 0;
 }
 
-.writeTweet p{
-  margin: 0 0 5px 0;
+.writeTweet{
+  padding: 11px;
+  height: 360;
+  color: #8899a6; 
 }
 
 .writeTweet p.username{

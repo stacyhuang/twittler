@@ -5,6 +5,8 @@
     <script src="moment.js"></script>
     <script src="data_generator.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link href='http://fonts.googleapis.com/css?family=Emilys+Candy|Fredericka+the+Great' rel='stylesheet' type='text/css'>
+
   </head>
   <body>
     <div class="navbar">
@@ -17,16 +19,12 @@
       <div class="sidebar">
         <div class="header">Write a tweet</div>
         <div class="writeTweet">
-          <form>
-            <p>
-              <textarea type='text' id='userTweet' placeholder="What's on your mind?"></textarea>
-            </p>
-            <span class="username">
-              @
-              <input type='text' id='username' />
-            </span>
-            <button type="submit" id="submitButton">Post</button>
-          </form>
+            <textarea type='text' id='userTweet' placeholder="What's on your mind?"></textarea>
+          <span class="username">
+            @
+            <input type='text' id='username' />
+          </span>
+          <button type="submit" id="submitButton">Post</button>
         </div>
       </div>
     </div>
@@ -87,7 +85,8 @@
             }
             createTweetContainer();
             $tweetUser.text(tweet.user);
-            $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
+            var timestamp = moment(tweet.created_at).format('MMM DD hh:mm A');
+            $tweetTimestamp.text(' · ' + timestamp);
             $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
             $('.newTweets').after($tweetContainer);
             totalCount++; 
@@ -108,7 +107,8 @@
             createTweetContainer();
             var tweet = streams.home[index];
             $tweetUser.text(tweet.user);
-            $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
+            var timestamp = moment(tweet.created_at).format('MMM DD hh:mm A');
+            $tweetTimestamp.text(' · ' + timestamp);
             $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
             $tweetContainer.appendTo($('.main'));
             index -= 1;
@@ -132,7 +132,8 @@
             createTweetContainer();
             var tweet = streams.users[selectedUser][userIndex];
             $tweetUser.text(tweet.user);
-            $tweetTimestamp.text(' · ' + moment(tweet.created_at).format('MMM DD hh:mm A'));
+            var timestamp = moment(tweet.created_at).format('MMM DD hh:mm A');
+            $tweetTimestamp.text(' · ' + timestamp);
             $tweetContent.text('@' + tweet.user + ': ' + tweet.message);
             $tweetContainer.appendTo($('.main'));
             userIndex -= 1;
@@ -152,7 +153,10 @@
         $('#submitButton').on('click', function(){
           var $username = $('#username').val();
           var $userTweet = $('#userTweet').val();
-          streams.users[$username] = [];
+          if(!streams.users[$username]){
+            streams.users[$username] = [];
+          }
+          console.log(streams.users[$username]);
           visitor = $username;
           writeTweet($userTweet);
           $('#username').val('');
